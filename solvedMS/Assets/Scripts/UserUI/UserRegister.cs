@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
-using MySql.Data.MySqlClient;
 
 public class UserRegister : MonoBehaviour {
     private string p_CurName = null;
@@ -48,7 +46,7 @@ public class UserRegister : MonoBehaviour {
         WebServerManager.ins.Post<playerprofile, playerprofile>(inputData, "API/user_login/", response => {
             if (response.is_success)
             {
-                Debug.Log($"UserRegister {response.playerName} 성공");
+                Debug.Log($"UserRegister {response.playerName} 데이터 삽입 성공");
             }
             else
             {
