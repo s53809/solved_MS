@@ -39,23 +39,23 @@ public class UserRegister : MonoBehaviour {
 
     public void OnRegisterButtonDown() {
         if (p_CurProfile == null || p_CurName == null) return;
-        try {
-            using (MySqlConnection conn = new MySqlConnection(ConnectionParams.getConnectionSql())) {
-                conn.Open();
-                string sql = "insert into 'playerprofile' value('" + testID.ToString() + "', '" + p_CurName +
-                             "', '" + p_CurProfile + "');";
 
-                MySqlCommand inscmd = new MySqlCommand(sql, conn);
+        playerprofile inputData = new playerprofile();
+        inputData.playerProfile = p_CurProfile;
+        inputData.playerName = p_CurName;
+        inputData.playerID = testID;
 
-                int rowUpdated = inscmd.ExecuteNonQuery();
-                if (rowUpdated > 0) Debug.Log(p_CurName + " 학생의 정보 입력 성공!");
-                else Debug.Log("정보 입력 실패");
+        WebServerManager.ins.Post<playerprofile, playerprofile>(inputData, "API/user_login/", response => {
+            if (response.is_success)
+            {
+                Debug.Log($"UserRegister {response.playerName} 성공");
             }
-        }
-        catch (Exception ex) {
-            Debug.LogError(ex.Message);
-        }
-        
+            else
+            {
+                Debug.LogError("UserRegister Register Button Responce Error!");
+            }
+        }, () => { Debug.LogError("UserRegister Register Button Network Error!"); });
+
         gameObject.SetActive(false);
     }
 
