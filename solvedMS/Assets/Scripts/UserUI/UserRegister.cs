@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections;
 
 public class UserRegister : MonoBehaviour {
     private string p_CurName = null;
@@ -41,24 +42,32 @@ public class UserRegister : MonoBehaviour {
         playerprofile inputData = new playerprofile();
         inputData.playerProfile = p_CurProfile;
         inputData.playerName = p_CurName;
-        inputData.playerID = testID;
+        inputData.playerID = GetUser.Instance.lastUserID;
+
+        if (inputData.playerID == -1) { Debug.LogError("이론상 나올 수가 없는 에러"); return; }
 
         WebServerManager.ins.Post<playerprofile, playerprofile>(inputData, "API/user_login/", response => {
             if (response.is_success)
             {
-                Debug.Log($"UserRegister {response.playerName} 데이터 삽입 성공");
+                StartCoroutine(RevealUser());
             }
             else
             {
                 Debug.LogError("UserRegister Register Button Responce Error!");
             }
         }, () => { Debug.LogError("UserRegister Register Button Network Error!"); });
-
-        gameObject.SetActive(false);
     }
 
     public void OnNameInput() {
         p_CurName = p_InputField.text;
         Debug.Log(p_CurName);
+    }
+
+    IEnumerator RevealUser()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        GetUser.Instance.ResponseGetUser();
+        gameObject.SetActive(false);
+        yield return null;
     }
 }

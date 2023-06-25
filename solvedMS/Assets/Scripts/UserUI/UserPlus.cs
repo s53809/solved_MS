@@ -1,10 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class UserPlus : MonoBehaviour
 {
-    public void OnButtonClicked() {
-        
-    }
+    [SerializeField] private GameObject registerPopup;
+    public void OnButtonClicked() => registerPopup?.SetActive(true);
 }

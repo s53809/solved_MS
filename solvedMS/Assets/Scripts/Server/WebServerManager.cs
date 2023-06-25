@@ -26,6 +26,7 @@ public class WebServerManager : MonoBehaviour
     {
         GameObject go = new GameObject("WebServerManager");
         m_ins = go.AddComponent<WebServerManager>();
+        DontDestroyOnLoad(go);
 
         m_ins.m_ip = pIP;
         m_ins.m_port = pPort;
